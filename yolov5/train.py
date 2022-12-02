@@ -511,7 +511,7 @@ def parse_opt(known=False):
     
     os.system("disable wandb")
 
-    return parser.parse_known_args()[0] if known else parser.parse_args()
+    return opt
 
 
 def main(opt, callbacks=Callbacks()):

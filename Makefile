@@ -7,7 +7,7 @@ ifndef DS_VOLUME
 endif
 
 ifndef NB_PORT
-	NB_PORT=8888
+	NB_PORT=8800
 endif
 
 ifndef MLF_PORT
@@ -28,14 +28,14 @@ build:
 
 dockershell:
 	docker run --rm --name $(CONTAINER_NAME) --gpus all \
-	-p 9197:9197 \
-	-v $(shell pwd):/iqf -v $(DS_VOLUME):/ds_volume \
+	--shm-size="32g" -p 9197:9197 \
+	-v $(shell pwd):/iqf -v $(DS_VOLUME):/$(DS_VOLUME) \
 	-it $(PROJ_NAME)
 
 notebookshell:
 	docker run --gpus all --privileged -itd --rm --name $(CONTAINER_NAME)-nb \
-	-p ${NB_PORT}:${NB_PORT} \
-	-v $(shell pwd):/iqf -v $(DS_VOLUME):/ds_volume \
+	--shm-size="32g" -p ${NB_PORT}:${NB_PORT} \
+	-v $(shell pwd):/iqf -v $(DS_VOLUME):/$(DS_VOLUME) \
 	$(PROJ_NAME) \
 	jupyter lab \
 	--NotebookApp.token='IQF' \
@@ -47,7 +47,7 @@ notebookshell:
 mlflow:
 	docker run --privileged -itd --rm --name $(CONTAINER_NAME)-mlf \
 	-p ${MLF_PORT}:${MLF_PORT} \
-	-v $(shell pwd):/iqf -v $(DS_VOLUME):/ds_volume \
+	-v $(shell pwd):/iqf -v $(DS_VOLUME):/$(DS_VOLUME) \
 	$(PROJ_NAME) \
 	mlflow ui --host 0.0.0.0:$(MLF_PORT)
 

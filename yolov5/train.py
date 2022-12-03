@@ -79,6 +79,10 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
     if isinstance(hyp, str):
         with open(hyp, errors='ignore') as f:
             hyp = yaml.safe_load(f)  # load hyps dict
+    
+    outjson = hyp.copy()
+    outjson.update( {"P": [], "R": [], "mAP@0.5": [], "mAP@0.5:0.95": [] } )
+    
     LOGGER.info(colorstr('hyperparameters: ') + ', '.join(f'{k}={v}' for k, v in hyp.items()))
     opt.hyp = hyp.copy()  # for saving hyps to checkpoints
 
@@ -356,6 +360,15 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
                                                 plots=False,
                                                 callbacks=callbacks,
                                                 compute_loss=compute_loss)
+
+            outjson["P"].append( np.array(results).reshape(1, -1)[:, 0].sum() )
+            outjson["R"].append( np.array(results).reshape(1, -1)[:, 1].sum() )
+            outjson["mAP_0.5"].append( np.array(results).reshape(1, -1)[:, 2].sum() )
+            outjson["mAP_0.5_0.95"].append( np.array(results).reshape(1, -1)[:, 3].sum() )
+
+            #save outputs
+            with open(os.path.join(opt.outputpath, 'results.json'), 'w') as f:
+                json.dump(outjson, f)
 
             # Update best mAP
             fi = fitness(np.array(results).reshape(1, -1))  # weighted combination of [P, R, mAP@.5, mAP@.5-.95]

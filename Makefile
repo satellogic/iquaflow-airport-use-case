@@ -49,7 +49,7 @@ mlflow:
 	-p ${MLF_PORT}:${MLF_PORT} \
 	-v $(shell pwd):/iqf -v $(DS_VOLUME):/$(DS_VOLUME) \
 	$(PROJ_NAME) \
-	mlflow ui --host 0.0.0.0:$(MLF_PORT)
+	cd yolov5 && mlflow ui --host 0.0.0.0:$(MLF_PORT)
 
 course:
 	wget https://image-quality-framework.s3.eu-west-1.amazonaws.com/iq-tool-box/datasets/course.zip

@@ -81,7 +81,7 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
             hyp = yaml.safe_load(f)  # load hyps dict
     
     outjson = hyp.copy()
-    outjson.update( {"P": [], "R": [], "mAP@0.5": [], "mAP@0.5:0.95": [] } )
+    outjson.update( {"P": [], "R": [], "mAP_0.5": [], "mAP_0.5_0.95": [] } )
     
     LOGGER.info(colorstr('hyperparameters: ') + ', '.join(f'{k}={v}' for k, v in hyp.items()))
     opt.hyp = hyp.copy()  # for saving hyps to checkpoints

@@ -1,7 +1,10 @@
 # iquaflow-airplane-yolov5-use-case
 
 Airplanes object detection on different levels of image compression.
-To request the dataset send an email to: iquaflow@satellogic.com
+
+To request the dataset send an email to: iquaflow@satellogic.com.
+
+Paper availabe [here](https://arxiv.org/pdf/2301.05892.pdf).
 ____________________________________________________________________________________________________
 
 
